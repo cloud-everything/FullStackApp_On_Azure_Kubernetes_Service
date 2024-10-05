@@ -1,0 +1,18 @@
+#==========================create mysql kubernetes=======================
+#https://dev.mysql.com/doc/mysql-operator/en/
+kubectl get sc #check the storage classes
+kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-crds.yaml
+kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-operator.yaml
+kubectl get deployment mysql-operator --namespace mysql-operator #check if mysql operator is available  
+
+
+CREATE SCHEMA `dining_services`;
+
+build the jar 
+docker run -p 8080:8080 dining_services   java -jar dining_services.jar   --spring.datasource.url=jdbc:mysql://host.docker.internal:3306/dining_services   --spring.datasource.username=root   --spring.datasource.password=Sql@10071999
+
+
+
+
+kubectl create namespace mysql
+kubectl get storageclass
