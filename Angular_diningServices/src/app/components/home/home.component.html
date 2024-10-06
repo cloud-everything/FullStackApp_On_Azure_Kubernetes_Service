@@ -1,4 +1,54 @@
 <app-navbar></app-navbar>
+<div class="message">{{editmessage}}</div>
 <div class="container">
-    hello world
+    <table class="mini-container1">
+        <thead>
+          <tr class="table-row">
+            <th class="table-cell">ID</th>
+            <th class="table-cell">Morning Meal Plan Count</th>
+            <th class="table-cell">Afternoon Meal Plan Count</th>
+            <th class="table-cell">Evening Meal Plan Count</th>
+            <th class="table-cell">Date</th>
+            <th class="table-cell">Action</th>
+            <th class="table-cell">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of allmealplans" class="table-row">
+            <td class="table-cell">{{item.id}}</td>
+            <td class="table-cell">{{item.morning_meal_plan_count}}</td>
+            <td class="table-cell">{{item.afternoon_meal_plan_count}}</td>
+            <td class="table-cell">{{item.evening_meal_plan_count}}</td>
+            <td class="table-cell">{{item.date}}</td>
+            <td class="table-cell">
+              <button (click)="editMealPlan(item)">Edit</button>
+            </td>
+            <td class="table-cell">
+              <button (click)="deleteMealPlan(item)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <form class="mini-container2" (submit)="addItem()">
+        <div>
+          <div>Morning Meal Plan Count</div>
+          <input type="number" [(ngModel)]="newdiningData.morning_meal_plan_count" name="morningMealPlan" required />
+        </div>
+        <div>
+          <div>Afternoon Meal Plan Count</div>
+          <input type="number" [(ngModel)]="newdiningData.afternoon_meal_plan_count" name="afternoonMealPlan" required />
+        </div>
+        <div>
+          <div>Evening Meal Plan Count</div>
+          <input type="number" [(ngModel)]="newdiningData.evening_meal_plan_count" name="eveningMealPlan" required />
+        </div>
+        <div>
+          <div>Date</div>
+          <input type="date" [(ngModel)]="newdiningData.date" name="date" required />
+        </div>
+        <input type="submit" />
+      </form>
+      
 </div>
+

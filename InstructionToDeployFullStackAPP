@@ -1,3 +1,8 @@
+#======connect to Azure kuberentes service via cloud shell
+az account set --subscription 78feeasd73-a3bc-asdbdb-89c4-dabasdf2812b ################333Set the cluster subscription
+az aks get-credentials --resource-group kubernetes-deployment --name gratitudeCluster --overwrite-existing ################Download cluster credentials
+
+
 #============================= deploy mysql kubernetes cluster=======================
 kubectl create namespace mysql ############create a mysql namespace
 kubectl apply -f mysql-service.yaml ####################create a headless service
@@ -48,6 +53,8 @@ kubectl describe certificate letsencrypt-prod-key #desrcibe it to check if cerit
 kubectl config set-context --current --namespace=springboot
 kubectl apply -f springboot-ingress.yaml #makesure the ingress is using tls and correct config is being used
 
+
+#=========================build the angular image========================
 
 
 
