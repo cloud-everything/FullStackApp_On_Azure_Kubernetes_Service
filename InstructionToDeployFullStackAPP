@@ -36,3 +36,24 @@ kubectl get pods
 kubectl get svc
 
 
+#=======================deploy the certificates=========================
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.yaml #install cert manager operator
+kubectl get pods --namespace cert-manager  #check for the pods 
+kubectl config set-context --current --namespace=cert-manager 
+kubectl apply -f CertificateClusterIssuer.yaml  #deploy always in cert-manager namespace
+kubectl config set-context --current --namespace=ingress-nginx #switch to ingress namespace
+kubectl apply -f Certificate.yaml #apply the certificate manifest in ingress namespace
+kubectl get certificate #check the certificate has been successfully created
+kubectl describe certificate letsencrypt-prod-key #desrcibe it to check if ceritificate has been issued
+kubectl config set-context --current --namespace=springboot
+kubectl apply -f springboot-ingress.yaml #makesure the ingress is using tls and correct config is being used
+
+
+
+
+
+
+
+
+
+
