@@ -1,0 +1,68 @@
+#======connect to Azure kuberentes service via cloud shell
+az account set --subscription 78feeasd73-a3bc-asdbdb-89c4-dabasdf2812b ################333Set the cluster subscription
+az aks get-credentials --resource-group kubernetes-deployment --name gratitudeCluster --overwrite-existing ################Download cluster credentials
+
+
+#============================= deploy mysql kubernetes cluster=======================
+kubectl create namespace mysql ############create a mysql namespace
+kubectl apply -f mysql-service.yaml ####################create a headless service
+kubectl apply -f mysql-statefulset.yaml ################create a statefulset for mysql
+kubectl apply -f mysql-loadbalancer-for-externalconnection.yaml ########connect using the external ip address on service
+kubectl get pods ###############check status of pods
+kubectl get services ################check status of service and load balancer
+kubectl get pvc #############check status of pvc
+
+
+
+
+#=============================== building docker image of springboot ============================
+#build the jar and run it locally
+java -jar dining_services-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:mysql://localhost:3306/dining_services --spring.datasource.username=root   --spring.datasource.password=Sql@10071999 ######################run jar locally
+
+docker build -t dining_services . ##################build the container
+
+docker run -p 8080:8080 dining_services   java -jar dining_services.jar  --spring.datasource.url=jdbc:mysql://host.docker.internal/dining_services   --spring.datasource.username=root   --spring.datasource.password=Sql@10071999 ######################33#run dockerlocally
+
+docker run -p 8080:8080 dining_services   java -jar dining_services.jar  --spring.datasource.url=jdbc:mysql://4.224.93.154:3306/dining_services  --spring.datasource.username=root --spring.datasource.password=Sql@10071999 #####################check if spring jar is connecting to database on kubernetes
+
+az login 
+az acr login --name diningRegistry 
+docker tag dining_services diningregistry.azurecr.io/dining_services
+docker push diningregistry.azurecr.io/dining_services ###############push java image to azure cloud
+
+
+
+
+#========================deploy springboot app in kubernetes cluster===================
+kubectl config set-context --current --namespace=springboot
+kubectl apply -f springboot-deployment.yaml 
+kubectl apply -f springboot-service.yaml 
+kubectl get pods
+kubectl get svc
+
+
+#=======================deploy the certificates=========================
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.yaml #install cert manager operator
+kubectl get pods --namespace cert-manager  #check for the pods 
+kubectl config set-context --current --namespace=cert-manager 
+kubectl apply -f CertificateClusterIssuer.yaml  #deploy always in cert-manager namespace
+kubectl config set-context --current --namespace=ingress-nginx #switch to ingress namespace
+kubectl apply -f Certificate.yaml #apply the certificate manifest in ingress namespace
+kubectl get certificate #check the certificate has been successfully created
+kubectl describe certificate letsencrypt-prod-key #desrcibe it to check if ceritificate has been issued
+kubectl config set-context --current --namespace=springboot
+kubectl apply -f springboot-ingress.yaml #makesure the ingress is using tls and correct config is being used
+
+
+#=========================build the angular image for docker========================
+docker build -t angular-dining-services . 
+az login 
+az acr login --name diningRegistry 
+docker tag angular-dining-services diningregistry.azurecr.io/angular-dining-services
+docker push diningregistry.azurecr.io/angular-dining-services ###############push java image to azure cloud
+kubectl apply -f angular-deployment.yaml ##############deploy the angular app
+kubectl apply -f angular-service.yaml ###################deploy the service app
+kubectl apply -f angular-ingress.yaml ###################deploy the ingress to connect it to internet
+
+
+

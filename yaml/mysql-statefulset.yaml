@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: mysql  # Specify the namespace here
+spec:
+  serviceName: mysql  # Service name to be used for stable DNS resolution
+  replicas: 1  # Number of MySQL instances (typically 1 for standalone MySQL)
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0  # MySQL version 8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "Sql@10071999"  # Set your root password
+        - name: MYSQL_DATABASE
+          value: "dining_services"  # Name of the database to create
+        - name: MYSQL_USER
+          value: "vishal"  # Create a non-root user
+        - name: MYSQL_PASSWORD
+          value: "Sql@10071999"  # Set password for the non-root user
+        ports:
+        - containerPort: 3306  # MySQL runs on port 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql  # Mounting volume to MySQL data directory
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-storage  # This will create a unique PVC for each pod in the StatefulSet
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi  # Requested storage size
+      storageClassName: managed-premium  # Use the same StorageClass
+
+
+
+

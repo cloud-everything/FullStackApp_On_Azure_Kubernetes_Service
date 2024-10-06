@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+<form class="mini-container2" (submit)="editItem()">
+    <div>
+      <div>Morning Meal Plan Count</div>
+      <input type="number" [(ngModel)]="newdiningData.morning_meal_plan_count" name="morningMealPlan" required />
+    </div>
+    <div>
+      <div>Afternoon Meal Plan Count</div>
+      <input type="number" [(ngModel)]="newdiningData.afternoon_meal_plan_count" name="afternoonMealPlan" required />
+    </div>
+    <div>
+      <div>Evening Meal Plan Count</div>
+      <input type="number" [(ngModel)]="newdiningData.evening_meal_plan_count" name="eveningMealPlan" required />
+    </div>
+    <div>
+      <div>Date</div>
+      <input type="date" [(ngModel)]="newdiningData.date" name="date" required />
+    </div>
+    <input type="submit" />
+  </form>

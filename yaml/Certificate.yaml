@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-prod
+spec:
+  secretName: cert-10071999  
+  issuerRef:
+    name: letsencrypt-prod 
+    kind: ClusterIssuer 
+  commonName: diningservices.vishalgandla.online  # The primary domain for the certificate
+  dnsNames:
+    - diningservices.vishalgandla.online  # The list of domain names to be included in the certificate
+ 

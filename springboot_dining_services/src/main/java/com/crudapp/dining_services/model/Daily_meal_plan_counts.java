@@ -22,6 +22,9 @@ public class Daily_meal_plan_counts {
 	private int evening_meal_plan_count;
     @Column(nullable = false) 
 	private LocalDate date;
+    public Long getId() {
+    	return id;
+    }
 	public int getEvening_meal_plan_count() {
 		return evening_meal_plan_count;
 	}
