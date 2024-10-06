@@ -1,5 +1,5 @@
 #============================= deploy mysql kubernetes cluster=======================
-kubectl create namespace mysql
+kubectl create namespace mysql ############create a mysql namespace
 kubectl apply -f mysql-service.yaml ####################create a headless service
 kubectl apply -f mysql-statefulset.yaml ################create a statefulset for mysql
 kubectl apply -f mysql-loadbalancer-for-externalconnection.yaml ########connect using the external ip address on service
