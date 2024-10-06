@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-external
+  namespace: mysql
+spec:
+  type: LoadBalancer  # Specify the LoadBalancer type
+  ports:
+    - port: 3306       # Expose MySQL on port 3306
+      targetPort: 3306  # Forward traffic to the MySQL pod
+  selector:
+    app: mysql
